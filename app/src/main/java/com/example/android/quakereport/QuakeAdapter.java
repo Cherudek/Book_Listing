@@ -21,8 +21,8 @@ public class QuakeAdapter extends ArrayAdapter<Quake> {
 
 
     //Constructor for our customized Quake Class
-    public QuakeAdapter(Activity context, ArrayList<Quake> quakes) {
-        super(context, 0, quakes);
+    public QuakeAdapter(Activity context, ArrayList<Quake> earthquakes) {
+        super(context, 0, earthquakes);
     }
 
     @NonNull
@@ -35,28 +35,28 @@ public class QuakeAdapter extends ArrayAdapter<Quake> {
         }
 
         // Get the {@link Quake} object located at this position in the list
-        Quake currentQuake = getItem(position);
+        Quake currentEarthquake = getItem(position);
 
         // Find the TextView in the list_item.xml layout with the ID list item 1
         TextView magTextView = (TextView) listItemView.findViewById(R.id.list_item_1);
 
         // Get the version name from the current Quake object and
         // set this text on the Magnitude TextView
-        magTextView.setText(currentQuake.getmMagnitude());
+        magTextView.setText(currentEarthquake.getmMagnitude());
 
         // Find the TextView in the list_item.xml layout with the ID list item 2
         TextView placeTextView = (TextView) listItemView.findViewById(R.id.list_item_2);
 
         // Get the version name from the current Quake object and
         // set this text on the Location TextView
-        placeTextView.setText(currentQuake.getmPlace());
+        placeTextView.setText(currentEarthquake.getmPlace());
 
         // Find the TextView in the list_item.xml layout with the ID list item 3
         TextView dateTextVIew = (TextView) listItemView.findViewById(R.id.list_item_3);
 
         // Get the version name from the current Quake object and
         // set this text on the Date TextView
-        dateTextVIew.setText(currentQuake.getmDate());
+        dateTextVIew.setText(currentEarthquake.getmDate());
 
         // Return the whole list item layout (containing 3 TextViews)
         // so that it can be shown in the ListView

@@ -12,23 +12,27 @@
 
         <TextView
             android:id="@+id/list_item_1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:layout_weight="1"
+            android:gravity="left"
             tools:text="Magnitude" />
 
         <TextView
             android:id="@+id/list_item_2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="left"
             tools:text="Place" />
 
         <TextView
             android:id="@+id/list_item_3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="left"
             tools:text="Date" />
     </LinearLayout>
 

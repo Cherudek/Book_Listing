@@ -36,9 +36,9 @@ public class Quake {
     @Override
     public String toString() {
         return "Quake{" +
-                "mMagnitude='" + mMagnitude + '\'' +
+                "mMagnitude=" + mMagnitude +
                 ", mPlace='" + mPlace + '\'' +
-                ", mDate='" + mDate + '\'' +
+                ", mDate=" + mDate +
                 '}';
     }
 }
