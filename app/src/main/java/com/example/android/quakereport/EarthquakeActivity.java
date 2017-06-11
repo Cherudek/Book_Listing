@@ -34,7 +34,7 @@ public class EarthquakeActivity extends AppCompatActivity {
         setContentView(R.layout.earthquake_activity);
 
         // Create a fake list of earthquakes.
-        ArrayList<Quake> earthquakes = QueryUtils.extractEarthquakes();
+        ArrayList<Quake> quakes = QueryUtils.extractEarthquakes();
 
 
         // Find a reference to the {@link ListView} in the layout
@@ -42,7 +42,7 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         // Create an {@link WordAdapter}, whose data source is a list of {@link Word}s. The
         // adapter knows how to create list items for each item in the list.
-        QuakeAdapter adapter = new QuakeAdapter(this, earthquakes);
+        QuakeAdapter adapter = new QuakeAdapter(this, quakes);
 
 
         // Set the adapter on the {@link ListView}

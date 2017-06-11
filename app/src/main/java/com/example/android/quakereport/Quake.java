@@ -6,21 +6,24 @@ package com.example.android.quakereport;
 
 public class Quake {
 
+
     // 3 variable instances
     private String mMagnitude;
     private String mPlace;
-    private String mDate;
+    private long mTimeInMilliseconds;
+
+
 
     // 1 Constructor with 3 Strings inputs
-    public Quake(String mMagnitude, String mPlace, String mDate) {
+    public Quake(String mMagnitude, String mPlace, long timeInMilliseconds) {
         this.mMagnitude = mMagnitude;
         this.mPlace = mPlace;
-        this.mDate = mDate;
+        mTimeInMilliseconds = timeInMilliseconds;
     }
 
     //Getter Method for the Date
-    public String getmDate() {
-        return mDate;
+    public long getmTimeInMilliseconds() {
+        return mTimeInMilliseconds;
     }
 
     //Getter Method for the Magnitude
@@ -28,17 +31,19 @@ public class Quake {
         return mMagnitude;
     }
 
+
     //Getter Method for the Place
     public String getmPlace() {
         return mPlace;
     }
+
 
     @Override
     public String toString() {
         return "Quake{" +
                 "mMagnitude=" + mMagnitude +
                 ", mPlace='" + mPlace + '\'' +
-                ", mDate=" + mDate +
+                ", mDate=" + mTimeInMilliseconds +
                 '}';
     }
 }

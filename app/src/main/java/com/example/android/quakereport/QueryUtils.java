@@ -49,7 +49,7 @@ public final class QueryUtils {
     public static ArrayList<Quake> extractEarthquakes() {
 
         // Create an empty ArrayList that we can start adding earthquakes to
-        ArrayList<Quake> earthquakes = new ArrayList<>();
+        ArrayList<Quake> quakes = new ArrayList<>();
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -62,9 +62,8 @@ public final class QueryUtils {
             //Convert SAMPLE_JSON_RESPONSE String into a JSONObject
             JSONObject baseJSONResponse = new JSONObject(SAMPLE_JSON_RESPONSE);
 
-
             //Extract “features” JSONArray
-            JSONArray earthquakeArray = baseJSONResponse.getJSONArray("feature");
+            JSONArray earthquakeArray = baseJSONResponse.getJSONArray("features");
 
             // Loop through each feature in the array
             for (int i = 0; i < earthquakeArray.length(); i++) {
@@ -81,14 +80,15 @@ public final class QueryUtils {
                 //Extract “place” for location
                 String location = properties.getString("place");
 
-                //Extract “time” for time
-                String time = properties.getString("time");
 
-                //Create Earthquake java object from magnitude, location, and time
+                //Extract “time” for time
+                long time = properties.getLong("time");
+
+                //Create Earthquake java object from magnitude, location offset, location primary and time
                 Quake earthquake = new Quake(magnitude, location, time);
 
                 //Add earthquake to list of earthquakes
-                earthquakes.add(earthquake);
+                quakes.add(earthquake);
 
             }
 
@@ -100,7 +100,7 @@ public final class QueryUtils {
         }
 
         // Return the list of earthquakes
-        return earthquakes;
+        return quakes;
     }
 
 }
