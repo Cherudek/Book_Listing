@@ -8,17 +8,24 @@ public class Quake {
 
 
     // 3 variable instances
-    private String mMagnitude;
+    private Double mMagnitude;
     private String mPlace;
     private long mTimeInMilliseconds;
+    private String mWeblink;
 
 
-
-    // 1 Constructor with 3 Strings inputs
-    public Quake(String mMagnitude, String mPlace, long timeInMilliseconds) {
+    // 1 Constructor with 1 String 2 doubles and 1 lonf inputs
+    public Quake(Double mMagnitude, String mPlace, long timeInMilliseconds, String mWeblink) {
         this.mMagnitude = mMagnitude;
         this.mPlace = mPlace;
-        mTimeInMilliseconds = timeInMilliseconds;
+        this.mTimeInMilliseconds = timeInMilliseconds;
+        this.mWeblink = mWeblink;
+
+    }
+
+    //Getter Method for the URL of the web pahe
+    public String getmWeblink() {
+        return mWeblink;
     }
 
     //Getter Method for the Date
@@ -27,23 +34,22 @@ public class Quake {
     }
 
     //Getter Method for the Magnitude
-    public String getmMagnitude() {
+    public Double getmMagnitude() {
         return mMagnitude;
     }
-
 
     //Getter Method for the Place
     public String getmPlace() {
         return mPlace;
     }
 
-
     @Override
     public String toString() {
         return "Quake{" +
                 "mMagnitude=" + mMagnitude +
                 ", mPlace='" + mPlace + '\'' +
-                ", mDate=" + mTimeInMilliseconds +
+                ", mTimeInMilliseconds=" + mTimeInMilliseconds +
+                ", mWeblink='" + mWeblink + '\'' +
                 '}';
     }
 }
