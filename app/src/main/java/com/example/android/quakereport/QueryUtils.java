@@ -46,8 +46,16 @@ public final class QueryUtils {
      * Query the USGS dataset and return a list of {@link Quake} objects.
      */
     public static List<Quake> fetchEarthquakeData(String requestUrl) {
+        Log.v(LOG_TAG, "TEST: Fetch Earthquake Data");
         // Create URL object
         URL url = createUrl(requestUrl);
+
+        //2 seconds delay added before fetching data to show progress bar
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
