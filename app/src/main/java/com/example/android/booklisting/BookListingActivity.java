@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.quakereport;
+package com.example.android.booklisting;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -36,16 +36,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quake>> {
+public class BookListingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    public static final String LOG_TAG = EarthquakeActivity.class.getName();
+    public static final String LOG_TAG = BookListingActivity.class.getName();
     /**
-     * Constant value for the earthquake loader ID. We can choose any integer.
+     * Constant value for the book loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
-    private static final int EARTHQUAKE_LOADER_ID = 1;
+    private static final int BOOKS_LOADER_ID = 1;
     /**
-     * URL to query the USGS dataset for earthquake information
+     * URL to query the USGS dataset for book information
      */
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20";
     /**
@@ -61,45 +61,45 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      */
     private ProgressBar mProgressBarView;
     /**
-     * Adapter for the list of earthquakes
+     * Adapter for the list of books
      */
-    private QuakeAdapter mAdapter;
+    private BookListingAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.earthquake_activity);
+        setContentView(R.layout.book_listing_activity);
 
         // Find a reference to the {@link ListView} in the layout
-        ListView earthquakeListView = (ListView) findViewById(R.id.list);
+        ListView bookListView = (ListView) findViewById(R.id.list);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_text_view);
-        earthquakeListView.setEmptyView(mEmptyStateTextView);
+        bookListView.setEmptyView(mEmptyStateTextView);
 
         mEmptyStateImageView = (ImageView) findViewById(R.id.empty_image_view);
-        earthquakeListView.setEmptyView(mEmptyStateImageView);
+        bookListView.setEmptyView(mEmptyStateImageView);
 
-        // Create a new adapter that takes an empty list of earthquakes as input
-        mAdapter = new QuakeAdapter(this, new ArrayList<Quake>());
+        // Create a new adapter that takes an empty list of books as input
+        mAdapter = new BookListingAdapter(this, new ArrayList<Book>());
 
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(mAdapter);
+        bookListView.setAdapter(mAdapter);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
-        // to open a website with more information about the selected earthquake.
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // to open a website with more information about the selected book.
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                // Find the current earthquake that was clicked on
-                Quake currentEarthquake = mAdapter.getItem(position);
+                // Find the current book that was clicked on
+                Book currentBook = mAdapter.getItem(position);
 
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri earthquakeUri = Uri.parse(currentEarthquake.getmWeblink());
+                Uri booklistingUri = Uri.parse(currentBook.getmWeblink());
 
-                // Create a new intent to view the earthquake URI
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                // Create a new intent to view the book URI
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, booklistingUri);
 
                 // Send the intent to launch a new activity
                 startActivity(websiteIntent);
@@ -119,7 +119,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+            loaderManager.initLoader(BOOKS_LOADER_ID, null, this);
             Log.v(LOG_TAG, "TEST: Calling the LoaderCallBack");
 
         } else {
@@ -135,28 +135,28 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     }
 
     @Override
-    public Loader<List<Quake>> onCreateLoader(int i, Bundle bundle) {
+    public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
 
         // Create a new loader for the given URL
-        return new EarthquakeLoader(this, USGS_REQUEST_URL);
+        return new BookListingLoader(this, USGS_REQUEST_URL);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Quake>> loader, List<Quake> earthquakes) {
+    public void onLoadFinished(Loader<List<Book>> loader, List<Book> bookListings) {
         Log.v(LOG_TAG, "TEST: Loader Cleared");
 
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.loading_spinner);
         loadingIndicator.setVisibility(View.GONE);
 
-        // Clear the adapter of previous earthquake data
+        // Clear the adapter of previous books data
         mAdapter.clear();
 
-        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+        // If there is a valid list of {@link book}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
-        if (earthquakes != null && !earthquakes.isEmpty()) {
-            mAdapter.addAll(earthquakes);
+        if (bookListings != null && !bookListings.isEmpty()) {
+            mAdapter.addAll(bookListings);
         } else {
             // Set empty state image to display a Crocodile Chilling"
             mEmptyStateImageView.setImageResource(R.drawable.relaxs);
@@ -165,7 +165,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Quake>> loader) {
+    public void onLoaderReset(Loader<List<Book>> loader) {
         Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
 
         // Loader reset, so we can clear out our existing data.

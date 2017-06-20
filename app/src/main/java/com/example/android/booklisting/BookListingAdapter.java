@@ -1,4 +1,4 @@
-package com.example.android.quakereport;
+package com.example.android.booklisting;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
@@ -19,16 +19,17 @@ import android.graphics.drawable.GradientDrawable;
  * Created by Gregorio on 06/06/2017.
  */
 
-public class QuakeAdapter extends ArrayAdapter<Quake> {
+public class BookListingAdapter extends ArrayAdapter<Book> {
 
     private static final String LOCATION_SEPARATOR = " of ";
-    private static final String LOG_TAG = QuakeAdapter.class.getSimpleName();
+    private static final String LOG_TAG = BookListingAdapter.class.getSimpleName();
     //new variables (primary location and location offset) to store the resulting Strings.
     String primaryLocation;
     String locationOffset;
-    //Constructor for our customized Quake Class
-    public QuakeAdapter(Activity context, ArrayList<Quake> quakes) {
-        super(context, 0, quakes);
+
+    //Constructor for our customized Book Class
+    public BookListingAdapter(Activity context, ArrayList<Book> books) {
+        super(context, 0, books);
     }
 
     private int getMagnitudeColor(double magnitude) {
@@ -109,7 +110,7 @@ public class QuakeAdapter extends ArrayAdapter<Quake> {
         }
 
         // Find the earthquake at the given position in the list of earthquakes
-        Quake currentEarthquake = getItem(position);
+        Book currentEarthquake = getItem(position);
 
         //original location String from the Earthquake object and store that in a variable.
         String originalLocation = currentEarthquake.getmPlace();

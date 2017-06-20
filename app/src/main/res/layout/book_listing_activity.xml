@@ -15,7 +15,23 @@
 -->
 <!-- Layout for a list of earthquakes -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="search books"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:textAlignment="center" />
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,6 +42,7 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:orientation="vertical" />
+
 
     <!-- Empty view is only visible when the list has no items. -->
 
@@ -53,9 +70,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium" />
 
-
-
     </LinearLayout>
 
 
 </RelativeLayout>
+
+</LinearLayout>

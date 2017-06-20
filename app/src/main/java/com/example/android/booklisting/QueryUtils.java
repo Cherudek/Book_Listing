@@ -1,15 +1,11 @@
-package com.example.android.quakereport;
+package com.example.android.booklisting;
 /**
  * Created by Gregorio on 09/06/2017.
  */
 
 
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.example.android.quakereport.EarthquakeActivity;
-import com.example.android.quakereport.Quake;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,10 +22,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.quakereport.EarthquakeActivity.LOG_TAG;
+import static com.example.android.booklisting.BookListingActivity.LOG_TAG;
 
 /**
- * Helper methods related to requesting and receiving earthquake data from USGS.
+ * Helper methods related to requesting and receiving books data from USGS.
  */
 public final class QueryUtils {
 
@@ -43,9 +39,9 @@ public final class QueryUtils {
     }
 
     /**
-     * Query the USGS dataset and return a list of {@link Quake} objects.
+     * Query the USGS dataset and return a list of {@link Book} objects.
      */
-    public static List<Quake> fetchEarthquakeData(String requestUrl) {
+    public static List<Book> fetchBooksData(String requestUrl) {
         Log.v(LOG_TAG, "TEST: Fetch Earthquake Data");
         // Create URL object
         URL url = createUrl(requestUrl);
@@ -66,10 +62,10 @@ public final class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-        List<Quake> earthquakes = extractFeatureFromJson(jsonResponse);
+        List<Book> books = extractFeatureFromJson(jsonResponse);
 
         // Return the list of {@link Earthquake}s
-        return earthquakes;
+        return books;
     }
 
     /**
@@ -115,7 +111,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the books JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -147,17 +143,17 @@ public final class QueryUtils {
 
 
     /**
-     * Return a list of {@link Quake} objects that has been built up from
+     * Return a list of {@link Book} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static List<Quake> extractFeatureFromJson(String earthquakeJSON) {
+    private static List<Book> extractFeatureFromJson(String bookJSON) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(earthquakeJSON)) {
+        if (TextUtils.isEmpty(bookJSON)) {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
-        List<Quake> earthquakes = new ArrayList<>();
+        // Create an empty ArrayList that we can start adding books to
+        List<Book> books = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -165,21 +161,21 @@ public final class QueryUtils {
         try {
 
             // Create a JSONObject from the JSON response string
-            JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
+            JSONObject baseJsonResponse = new JSONObject(bookJSON);
 
             // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or earthquakes).
-            JSONArray earthquakeArray = baseJsonResponse.getJSONArray("features");
+            // which represents a list of features (or books).
+            JSONArray bookArray = baseJsonResponse.getJSONArray("features");
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
-            for (int i = 0; i < earthquakeArray.length(); i++) {
+            // For each book in the bookArray, create an {@link Earthquake} object
+            for (int i = 0; i < bookArray.length(); i++) {
 
-                // Get a single earthquake at position i within the list of earthquakes
-                JSONObject currentEarthquake = earthquakeArray.getJSONObject(i);
+                // Get a single book at position i within the list of book
+                JSONObject currentEarthquake = bookArray.getJSONObject(i);
 
-                // For a given earthquake, extract the JSONObject associated with the
+                // For a given book, extract the JSONObject associated with the
                 // key called "properties", which represents a list of all properties
-                // for that earthquake.
+                // for that book.
                 JSONObject properties = currentEarthquake.getJSONObject("properties");
 
                 // Extract the value for the key called "mag"
@@ -196,21 +192,21 @@ public final class QueryUtils {
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
                 // and url from the JSON response.
-                Quake earthquake = new Quake(magnitude, location, time, url);
+                Book book = new Book(magnitude, location, time, url);
 
-                // Add the new {@link Earthquake} to the list of earthquakes.
-                earthquakes.add(earthquake);
+                // Add the new {@link Earthquake} to the list of books.
+                books.add(book);
             }
 
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
         }
 
-        // Return the list of earthquakes
-        return earthquakes;
+        // Return the list of books
+        return books;
     }
 
 }

@@ -1,10 +1,10 @@
-package com.example.android.quakereport;
+package com.example.android.booklisting;
 
 /**
  * Created by Gregorio on 06/06/2017.
  */
 
-public class Quake {
+public class Book {
 
 
     // 3 variable instances
@@ -15,7 +15,7 @@ public class Quake {
 
 
     // 1 Constructor with 1 String 2 doubles and 1 lonf inputs
-    public Quake(Double mMagnitude, String mPlace, long timeInMilliseconds, String mWeblink) {
+    public Book(Double mMagnitude, String mPlace, long timeInMilliseconds, String mWeblink) {
         this.mMagnitude = mMagnitude;
         this.mPlace = mPlace;
         this.mTimeInMilliseconds = timeInMilliseconds;
@@ -45,7 +45,7 @@ public class Quake {
 
     @Override
     public String toString() {
-        return "Quake{" +
+        return "Book{" +
                 "mMagnitude=" + mMagnitude +
                 ", mPlace='" + mPlace + '\'' +
                 ", mTimeInMilliseconds=" + mTimeInMilliseconds +
