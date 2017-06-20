@@ -23,18 +23,15 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.content.Loader;
-import android.app.LoaderManager.LoaderCallbacks;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,57 +65,19 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      */
     private QuakeAdapter mAdapter;
 
-
-    @Override
-    public Loader<List<Quake>> onCreateLoader(int i, Bundle bundle) {
-        Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
-
-        // Create a new loader for the given URL
-        return new EarthquakeLoader(this, USGS_REQUEST_URL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Quake>> loader, List<Quake> earthquakes) {
-        Log.v(LOG_TAG, "TEST: Loader Cleared");
-
-        // Clear the adapter of previous earthquake data
-        mAdapter.clear();
-
-        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
-        // data set. This will trigger the ListView to update.
-        if (earthquakes != null && !earthquakes.isEmpty()) {
-            mAdapter.addAll(earthquakes);
-        }
-
-        // Set a progress bar when data is loading
-        mProgressBarView.setVisibility(View.GONE);
-
-        // Set empty state text to display "No earthquakes found."
-        mEmptyStateTextView.setText(R.string.empty_state);
-
-        // Set empty state Image to display "Crocs"
-        mEmptyStateImageView.setImageResource(R.drawable.relaxs);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Quake>> loader) {
-        Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
-
-        // Loader reset, so we can clear out our existing data.
-        mAdapter.clear();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_text_view);
         earthquakeListView.setEmptyView(mEmptyStateTextView);
+
+        mEmptyStateImageView = (ImageView) findViewById(R.id.empty_image_view);
+        earthquakeListView.setEmptyView(mEmptyStateImageView);
 
         // Create a new adapter that takes an empty list of earthquakes as input
         mAdapter = new QuakeAdapter(this, new ArrayList<Quake>());
@@ -126,7 +85,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(mAdapter);
-
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected earthquake.
@@ -148,7 +106,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -164,6 +121,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
             Log.v(LOG_TAG, "TEST: Calling the LoaderCallBack");
+
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
@@ -174,16 +132,44 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             Log.i(LOG_TAG, "TEST: No Internet Connectivity");
 
         }
-
-
-        mProgressBarView = (ProgressBar) findViewById(R.id.loading_spinner);
-        earthquakeListView.setVisibility(View.VISIBLE);
-
-        mEmptyStateImageView = (ImageView) findViewById(R.id.empty_view2);
-        earthquakeListView.setEmptyView(mEmptyStateImageView);
-
-
     }
 
+    @Override
+    public Loader<List<Quake>> onCreateLoader(int i, Bundle bundle) {
+        Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
+
+        // Create a new loader for the given URL
+        return new EarthquakeLoader(this, USGS_REQUEST_URL);
     }
+
+    @Override
+    public void onLoadFinished(Loader<List<Quake>> loader, List<Quake> earthquakes) {
+        Log.v(LOG_TAG, "TEST: Loader Cleared");
+
+        // Hide loading indicator because the data has been loaded
+        View loadingIndicator = findViewById(R.id.loading_spinner);
+        loadingIndicator.setVisibility(View.GONE);
+
+        // Clear the adapter of previous earthquake data
+        mAdapter.clear();
+
+        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+        // data set. This will trigger the ListView to update.
+        if (earthquakes != null && !earthquakes.isEmpty()) {
+            mAdapter.addAll(earthquakes);
+        } else {
+            // Set empty state image to display a Crocodile Chilling"
+            mEmptyStateImageView.setImageResource(R.drawable.relaxs);
+            mEmptyStateTextView.setText(R.string.empty_state);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Quake>> loader) {
+        Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
+
+        // Loader reset, so we can clear out our existing data.
+        mAdapter.clear();
+    }
+}
 
