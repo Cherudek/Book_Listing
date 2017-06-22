@@ -1,13 +1,17 @@
 package com.example.android.booklisting;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,84 +25,14 @@ import android.graphics.drawable.GradientDrawable;
 
 public class BookListingAdapter extends ArrayAdapter<Book> {
 
-    private static final String LOCATION_SEPARATOR = " of ";
+
     private static final String LOG_TAG = BookListingAdapter.class.getSimpleName();
-    //new variables (primary location and location offset) to store the resulting Strings.
-    String primaryLocation;
-    String locationOffset;
 
     //Constructor for our customized Book Class
     public BookListingAdapter(Activity context, ArrayList<Book> books) {
         super(context, 0, books);
     }
 
-    private int getMagnitudeColor(double magnitude) {
-
-        int magnitudeColorResourceId;
-        int magnitudeFloor = (int) Math.floor(magnitude);
-
-        switch (magnitudeFloor) {
-
-            case 0:
-                ;
-            case 1:
-                magnitudeColorResourceId = R.color.magnitude1;
-                break;
-            case 2:
-                magnitudeColorResourceId = R.color.magnitude2;
-                break;
-            case 3:
-                magnitudeColorResourceId = R.color.magnitude3;
-                break;
-            case 4:
-                magnitudeColorResourceId = R.color.magnitude4;
-                break;
-            case 5:
-                magnitudeColorResourceId = R.color.magnitude5;
-                break;
-            case 6:
-                magnitudeColorResourceId = R.color.magnitude6;
-                break;
-            case 7:
-                magnitudeColorResourceId = R.color.magnitude7;
-                break;
-            case 8:
-                magnitudeColorResourceId = R.color.magnitude8;
-                break;
-            case 9:
-                magnitudeColorResourceId = R.color.magnitude9;
-                break;
-            default:
-                magnitudeColorResourceId = R.color.magnitude10plus;
-                break;
-        }
-        return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
-    }
-
-    /**
-     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
-     */
-    private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
-        return dateFormat.format(dateObject);
-    }
-
-    /**
-     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
-     */
-    private String formatTime(Date dateObject) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        return timeFormat.format(dateObject);
-    }
-
-    /**
-     * Return the formatted magnitude string showing 1 decimal place (i.e. "3.2")
-     * from a decimal magnitude value.
-     */
-    private String formatMagnitude(double magnitude) {
-        DecimalFormat formatter = new DecimalFormat("0.0");
-        return formatter.format(magnitude);
-    }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // Check if there is an existing list item view (called convertView) that we can reuse,
@@ -109,68 +43,64 @@ public class BookListingAdapter extends ArrayAdapter<Book> {
                     R.layout.list_item, parent, false);
         }
 
-        // Find the earthquake at the given position in the list of earthquakes
-        Book currentEarthquake = getItem(position);
+        // Find the book at the given position in the list of earthquakes
+        Book currentBook = getItem(position);
 
-        //original location String from the Earthquake object and store that in a variable.
-        String originalLocation = currentEarthquake.getmPlace();
+        //original author String from the Book object and store that in a variable.
+        String author = currentBook.getmAuthor();
 
-        //check if the original location String contains the LOCATION_SEPARATOR first,
-        if (originalLocation.contains(LOCATION_SEPARATOR)) {
-            String[] parts = originalLocation.split(LOCATION_SEPARATOR);
-            locationOffset = parts[0] + LOCATION_SEPARATOR;
-            primaryLocation = parts[1];
-        } else {
-            locationOffset = getContext().getString(R.string.near_the);
-            primaryLocation = originalLocation;
-        }
+        //original image String from the Book object and store that in a variable.
+        String image = currentBook.getmCover();
+
+        // Convert the url string into an ImageView object
+        URL imageUrl = new URL(String image);
+        Bitmap bmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 
 
-        // Find the TextView with view ID magnitude
-        TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
+        //original title String from the Book object and store that in a variable.
+        String title = currentBook.getmTitle();
 
-        // Format the magnitude to show 1 decimal place
-        String formattedMag = formatMagnitude(currentEarthquake.getmMagnitude());
-        // Display the magnitude of the current earthquake in that TextView
-        magnitudeView.setText(formattedMag);
+        //original date String from the Book object and store that in a variable.
+        String date = currentBook.getmDate();
 
-        // Find the TextView with view ID location
-        TextView locationView = (TextView) listItemView.findViewById(R.id.primary_location);
+        //original publisher String from the Book object and store that in a variable.
+        String publisher = currentBook.getmPublisher();
+
+        // url link string from the Book object and store it in a variable
+        String url = currentBook.getmWeblink();
+
+
+        // Find the ImageView with view ID image
+        ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
+
+        //Display the  image URL
+        imageView.setImageBitmap(bmp);
+
+
+        // Find the TextView with view ID author
+        TextView authorView = (TextView) listItemView.findViewById(R.id.author);
+        // Display the author of the current book in that TextView
+        authorView.setText(author);
+
+
+        // Find the TextView with view ID title
+        TextView titleView = (TextView) listItemView.findViewById(R.id.title);
         // Display the location of the current earthquake in that TextView
-        locationView.setText(primaryLocation);
+        titleView.setText(title);
 
-
-        // Find the TextView with view ID location
-        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.location_offset);
-        // Display the location of the current earthquake in that TextView
-        locationOffsetView.setText(locationOffset);
-
-        // Create a new Date object from the time in milliseconds of the earthquake
-        Date dateObject = new Date(currentEarthquake.getmTimeInMilliseconds());
 
         // Find the TextView with view ID date
         TextView dateView = (TextView) listItemView.findViewById(R.id.date);
-        // Format the date string (i.e. "Mar 3, 1984")
-        String formattedDate = formatDate(dateObject);
-        // Display the date of the current earthquake in that TextView
-        dateView.setText(formattedDate);
 
-        // Find the TextView with view ID time
-        TextView timeView = (TextView) listItemView.findViewById(R.id.time);
-        // Format the time string (i.e. "4:30PM")
-        String formattedTime = formatTime(dateObject);
+        // Display the date of the current book in that TextView
+        dateView.setText(date);
+
+        // Find the TextView with view ID publisher
+        TextView timeView = (TextView) listItemView.findViewById(R.id.publisher);
+
         // Display the time of the current earthquake in that TextView
-        timeView.setText(formattedTime);
+        timeView.setText(publisher);
 
-        // Set the proper background color on the magnitude circle.
-        // Fetch the background from the TextView, which is a GradientDrawable.
-        GradientDrawable magnitudeCircle = (GradientDrawable) magnitudeView.getBackground();
-
-        // Get the appropriate background color based on the current earthquake magnitude
-        int magnitudeColor = getMagnitudeColor(currentEarthquake.getmMagnitude());
-
-        // Set the color on the magnitude circle
-        magnitudeCircle.setColor(magnitudeColor);
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;

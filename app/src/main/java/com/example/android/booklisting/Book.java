@@ -7,49 +7,58 @@ package com.example.android.booklisting;
 public class Book {
 
 
-    // 3 variable instances
-    private Double mMagnitude;
-    private String mPlace;
-    private long mTimeInMilliseconds;
+    // 6 variable instances
+    private String mTitle;
+    private String mAuthor;
+    private String mCover;
     private String mWeblink;
+    private String mDate;
+    private String mPublisher;
 
-
-    // 1 Constructor with 1 String 2 doubles and 1 lonf inputs
-    public Book(Double mMagnitude, String mPlace, long timeInMilliseconds, String mWeblink) {
-        this.mMagnitude = mMagnitude;
-        this.mPlace = mPlace;
-        this.mTimeInMilliseconds = timeInMilliseconds;
+    // 1 Constructor with 5 Strings and 1 integer
+    public Book(String mTitle, String mAuthor, String mCover, String mWeblink, String mDate, String mPublisher) {
+        this.mTitle = mTitle;
+        this.mAuthor = mAuthor;
+        this.mCover = mCover;
         this.mWeblink = mWeblink;
+        this.mDate = mDate;
+        this.mPublisher = mPublisher;
 
     }
 
-    //Getter Method for the URL of the web pahe
+    public String getmDate() {
+        return mDate;
+    }
+
+    public String getmPublisher() {
+        return mPublisher;
+    }
+
+    public String getmTitle() {
+        return mTitle;
+    }
+
+    public String getmAuthor() {
+        return mAuthor;
+    }
+
+    public String getmCover() {
+        return mCover;
+    }
+
     public String getmWeblink() {
         return mWeblink;
-    }
-
-    //Getter Method for the Date
-    public long getmTimeInMilliseconds() {
-        return mTimeInMilliseconds;
-    }
-
-    //Getter Method for the Magnitude
-    public Double getmMagnitude() {
-        return mMagnitude;
-    }
-
-    //Getter Method for the Place
-    public String getmPlace() {
-        return mPlace;
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "mMagnitude=" + mMagnitude +
-                ", mPlace='" + mPlace + '\'' +
-                ", mTimeInMilliseconds=" + mTimeInMilliseconds +
+                "mTitle='" + mTitle + '\'' +
+                ", mAuthor='" + mAuthor + '\'' +
+                ", mCover=" + mCover +
                 ", mWeblink='" + mWeblink + '\'' +
+                ", mDate='" + mDate + '\'' +
+                ", mPublisher='" + mPublisher + '\'' +
                 '}';
     }
 }

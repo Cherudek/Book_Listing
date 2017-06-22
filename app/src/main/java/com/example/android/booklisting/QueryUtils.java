@@ -39,7 +39,7 @@ public final class QueryUtils {
     }
 
     /**
-     * Query the USGS dataset and return a list of {@link Book} objects.
+     * Query the Google Book dataset and return a list of {@link Book} objects.
      */
     public static List<Book> fetchBooksData(String requestUrl) {
         Log.v(LOG_TAG, "TEST: Fetch Earthquake Data");
@@ -61,7 +61,7 @@ public final class QueryUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        // Extract relevant fields from the JSON response and create a list of {@link Book}s
         List<Book> books = extractFeatureFromJson(jsonResponse);
 
         // Return the list of {@link Earthquake}s
@@ -165,34 +165,46 @@ public final class QueryUtils {
 
             // Extract the JSONArray associated with the key called "features",
             // which represents a list of features (or books).
-            JSONArray bookArray = baseJsonResponse.getJSONArray("features");
+            JSONArray bookArray = baseJsonResponse.getJSONArray("items");  //features
 
             // For each book in the bookArray, create an {@link Earthquake} object
             for (int i = 0; i < bookArray.length(); i++) {
 
                 // Get a single book at position i within the list of book
-                JSONObject currentEarthquake = bookArray.getJSONObject(i);
+                JSONObject currentBook = bookArray.getJSONObject(i);
 
                 // For a given book, extract the JSONObject associated with the
                 // key called "properties", which represents a list of all properties
                 // for that book.
-                JSONObject properties = currentEarthquake.getJSONObject("properties");
+                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
                 // Extract the value for the key called "mag"
-                double magnitude = properties.getDouble("mag");
+                String title = volumeInfo.getString("title");
 
                 // Extract the value for the key called "place"
-                String location = properties.getString("place");
+                String publisher = volumeInfo.getString("publisher");
 
                 // Extract the value for the key called "time"
-                long time = properties.getLong("time");
+                String publishedDate = volumeInfo.getString("publishedDate");
 
                 // Extract the value for the key called "url"
-                String url = properties.getString("url");
+                String url = volumeInfo.getString("canonicalVolumeLink");
+
+
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+
+                // Extract the value for the key called "imageLinks"
+                String smallThumb = imageLinks.getString("smallThumbnail");
+
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+
+                String author = authors.getString(1);
+
+
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
                 // and url from the JSON response.
-                Book book = new Book(magnitude, location, time, url);
+                Book book = new Book(title, publisher, publishedDate, url, smallThumb, author);
 
                 // Add the new {@link Earthquake} to the list of books.
                 books.add(book);

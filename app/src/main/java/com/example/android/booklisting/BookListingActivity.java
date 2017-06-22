@@ -47,7 +47,13 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
     /**
      * URL to query the USGS dataset for book information
      */
-    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20";
+    //private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20";
+
+    /**
+     * URL to query the Google Book Api dataset for book information
+     */
+    private static final String USGS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=10";
+
     /**
      * TextView that is displayed when the list is empty
      */
