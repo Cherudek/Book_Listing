@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -19,6 +21,8 @@ import java.util.Date;
 
 import android.graphics.drawable.GradientDrawable;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by Gregorio on 06/06/2017.
  */
@@ -26,7 +30,9 @@ import android.graphics.drawable.GradientDrawable;
 public class BookListingAdapter extends ArrayAdapter<Book> {
 
 
+
     private static final String LOG_TAG = BookListingAdapter.class.getSimpleName();
+
 
     //Constructor for our customized Book Class
     public BookListingAdapter(Activity context, ArrayList<Book> books) {
@@ -43,22 +49,24 @@ public class BookListingAdapter extends ArrayAdapter<Book> {
                     R.layout.list_item, parent, false);
         }
 
-        // Find the book at the given position in the list of earthquakes
+        // Find the book at the given position in the list of books
         Book currentBook = getItem(position);
 
         //original author String from the Book object and store that in a variable.
         String author = currentBook.getmAuthor();
 
-        //original image String from the Book object and store that in a variable.
-        String image = currentBook.getmCover();
+        // Find the ImageView with view ID image
+        ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
 
-        // Convert the url string into an ImageView object
-        URL imageUrl = new URL(String image);
-        Bitmap bmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+        // url string for the thumbnail image
+        String imageUrl = currentBook.getmCover();
 
+        // set the book cover image in the ImageView
+        Picasso.with(getContext()).load(imageUrl).into(imageView);
 
         //original title String from the Book object and store that in a variable.
         String title = currentBook.getmTitle();
+        Log.i(LOG_TAG, "TEST: the current book title is" + title);
 
         //original date String from the Book object and store that in a variable.
         String date = currentBook.getmDate();
@@ -70,13 +78,6 @@ public class BookListingAdapter extends ArrayAdapter<Book> {
         String url = currentBook.getmWeblink();
 
 
-        // Find the ImageView with view ID image
-        ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
-
-        //Display the  image URL
-        imageView.setImageBitmap(bmp);
-
-
         // Find the TextView with view ID author
         TextView authorView = (TextView) listItemView.findViewById(R.id.author);
         // Display the author of the current book in that TextView
@@ -85,7 +86,7 @@ public class BookListingAdapter extends ArrayAdapter<Book> {
 
         // Find the TextView with view ID title
         TextView titleView = (TextView) listItemView.findViewById(R.id.title);
-        // Display the location of the current earthquake in that TextView
+        // Display the title of the current book in that TextView
         titleView.setText(title);
 
 

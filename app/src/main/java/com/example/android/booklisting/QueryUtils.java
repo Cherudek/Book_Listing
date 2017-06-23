@@ -39,7 +39,7 @@ public final class QueryUtils {
     }
 
     /**
-     * Query the Google Book dataset and return a list of {@link Book} objects.
+     * Query the Google Book data  set and return a list of {@link Book} objects.
      */
     public static List<Book> fetchBooksData(String requestUrl) {
         Log.v(LOG_TAG, "TEST: Fetch Earthquake Data");
@@ -108,10 +108,10 @@ public final class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                Log.e(LOG_TAG, "TEST: Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the books JSON results.", e);
+            Log.e(LOG_TAG, "TEST: Problem retrieving the books JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -163,23 +163,26 @@ public final class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
 
-            // Extract the JSONArray associated with the key called "features",
+            // Extract the JSONArray associated with the key called "items",
             // which represents a list of features (or books).
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");  //features
+            JSONArray bookItemArray = baseJsonResponse.getJSONArray("items");
 
-            // For each book in the bookArray, create an {@link Earthquake} object
-            for (int i = 0; i < bookArray.length(); i++) {
+
+            // For each book in the bookArray, create an {@link Book} object
+            for (int i = 0; i < bookItemArray.length(); i++) {
 
                 // Get a single book at position i within the list of book
-                JSONObject currentBook = bookArray.getJSONObject(i);
+                JSONObject currentBook = bookItemArray.getJSONObject(i);
+
 
                 // For a given book, extract the JSONObject associated with the
-                // key called "properties", which represents a list of all properties
+                // key called "volumeInfo", which represents a list of all properties
                 // for that book.
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
                 // Extract the value for the key called "mag"
                 String title = volumeInfo.getString("title");
+                Log.v(LOG_TAG, "TEST: the Title of the book is: " + title);
 
                 // Extract the value for the key called "place"
                 String publisher = volumeInfo.getString("publisher");
@@ -196,15 +199,15 @@ public final class QueryUtils {
                 // Extract the value for the key called "imageLinks"
                 String smallThumb = imageLinks.getString("smallThumbnail");
 
-                JSONArray authors = volumeInfo.getJSONArray("authors");
 
-                String author = authors.getString(1);
+                JSONArray authorsArray = volumeInfo.getJSONArray("authors");
 
+                String author = authorsArray.getString(0);
 
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
                 // and url from the JSON response.
-                Book book = new Book(title, publisher, publishedDate, url, smallThumb, author);
+                Book book = new Book(smallThumb, author, title, publishedDate, publisher, url);
 
                 // Add the new {@link Earthquake} to the list of books.
                 books.add(book);
@@ -214,7 +217,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e("TEST: QueryUtils", "Problem parsing the book JSON results", e);
         }
 
         // Return the list of books

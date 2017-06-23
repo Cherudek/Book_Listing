@@ -45,14 +45,9 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
      */
     private static final int BOOKS_LOADER_ID = 1;
     /**
-     * URL to query the USGS dataset for book information
-     */
-    //private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20";
-
-    /**
      * URL to query the Google Book Api dataset for book information
      */
-    private static final String USGS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=10";
+    private static final String GOOGLE_BOOKS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=30";
 
     /**
      * TextView that is displayed when the list is empty
@@ -145,8 +140,9 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
 
         // Create a new loader for the given URL
-        return new BookListingLoader(this, USGS_REQUEST_URL);
+        return new BookListingLoader(this, GOOGLE_BOOKS_REQUEST_URL);
     }
+
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> bookListings) {

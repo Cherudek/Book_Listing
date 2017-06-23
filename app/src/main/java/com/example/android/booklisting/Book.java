@@ -10,17 +10,17 @@ public class Book {
     // 6 variable instances
     private String mTitle;
     private String mAuthor;
-    private String mCover;
-    private String mWeblink;
+    private String mImageUrl;
+    private String mWebUrl;
     private String mDate;
     private String mPublisher;
 
     // 1 Constructor with 5 Strings and 1 integer
-    public Book(String mTitle, String mAuthor, String mCover, String mWeblink, String mDate, String mPublisher) {
+    public Book(String mImageUrl, String mAuthor, String mTitle, String mDate, String mPublisher, String mWebUrl) {
         this.mTitle = mTitle;
         this.mAuthor = mAuthor;
-        this.mCover = mCover;
-        this.mWeblink = mWeblink;
+        this.mImageUrl = mImageUrl;
+        this.mWebUrl = mWebUrl;
         this.mDate = mDate;
         this.mPublisher = mPublisher;
 
@@ -43,11 +43,11 @@ public class Book {
     }
 
     public String getmCover() {
-        return mCover;
+        return mImageUrl;
     }
 
     public String getmWeblink() {
-        return mWeblink;
+        return mWebUrl;
     }
 
     @Override
@@ -55,8 +55,8 @@ public class Book {
         return "Book{" +
                 "mTitle='" + mTitle + '\'' +
                 ", mAuthor='" + mAuthor + '\'' +
-                ", mCover=" + mCover +
-                ", mWeblink='" + mWeblink + '\'' +
+                ", mCover=" + mImageUrl +
+                ", mWeblink='" + mWebUrl + '\'' +
                 ", mDate='" + mDate + '\'' +
                 ", mPublisher='" + mPublisher + '\'' +
                 '}';

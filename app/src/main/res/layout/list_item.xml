@@ -10,10 +10,9 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/magnitude_circle"
         android:gravity="center" />
 
 
