@@ -73,16 +73,26 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
      */
     private BookListingAdapter mAdapter;
 
+    //ListView that is displayed when the list is empty
+    private ListView bookListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_listing_activity);
 
+
+        // Find a reference to the {@link ListView} in the layout
+        bookListView = (ListView) findViewById(R.id.list);
+
         // Find a reference to the {@link SearchView} in the layout
         searchView = (SearchView) findViewById(R.id.search_view);
 
+        // Find a reference to the {@link loading_spinner} in the layout
+        mProgressBarView = (ProgressBar) findViewById(R.id.loading_spinner);
+
         // Find a reference to the {@link ListView} in the layout
-        ListView bookListView = (ListView) findViewById(R.id.list);
+        final ListView bookListView = (ListView) findViewById(R.id.list);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_text_view);
         bookListView.setEmptyView(mEmptyStateTextView);
@@ -96,6 +106,12 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         bookListView.setAdapter(mAdapter);
+
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected book.
@@ -118,15 +134,8 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         });
 
 
-        // Get a reference to the ConnectivityManager to check state of network connectivity
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
         //Set an OnQueryTextListener to the search button
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
 
             @Override
             public boolean onQueryTextChange(String query) {
@@ -135,11 +144,9 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
 
             @Override
             public boolean onQueryTextSubmit(String newText) {
-
-                searchView.setSubmitButtonEnabled(true);
-
                 //Get the query given by the user
                 mQuery = searchView.getQuery().toString();
+                mQuery = mQuery.replace(" ", "+");
                 //Restart the Loader upon the search query(execute the search)
                 getLoaderManager().restartLoader(BOOKS_LOADER_ID, null, BookListingActivity.this);
                 return true;
@@ -152,9 +159,6 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         if (networkInfo != null && networkInfo.isConnected()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             LoaderManager loaderManager = getLoaderManager();
-
-            //Default search key when you open the app for the first time.
-            searchView.setQuery("Android", true);
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
@@ -178,8 +182,21 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
 
+        mProgressBarView.setVisibility(View.VISIBLE);
+        bookListView.setVisibility(View.INVISIBLE);
+        mEmptyStateTextView.setVisibility(View.GONE);
+        mEmptyStateImageView.setVisibility(View.GONE);
+
+        String requestUrl = "";
+        if (mQuery != null && mQuery != "") {
+            requestUrl = GOOGLE_BOOKS_REQUEST_URL + mQuery;
+        } else {
+            String defaultQuery = "android";
+            requestUrl = GOOGLE_BOOKS_REQUEST_URL + defaultQuery;
+        }
+
         // Create a new loader for the given URL
-        return new BookListingLoader(this, GOOGLE_BOOKS_REQUEST_URL + mQuery);
+        return new BookListingLoader(this, requestUrl);
     }
 
 
@@ -188,8 +205,7 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         Log.v(LOG_TAG, "TEST: Loader Cleared");
 
         // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_spinner);
-        loadingIndicator.setVisibility(View.GONE);
+        mProgressBarView.setVisibility(View.GONE);
 
         // Clear the adapter of previous books data
         mAdapter.clear();
