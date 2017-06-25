@@ -232,6 +232,7 @@ public final class QueryUtils {
 
                 String author;
 
+
                 if (authorsArray(0).has("authors")) {
 
                     author = authorsArray.getString(0);
