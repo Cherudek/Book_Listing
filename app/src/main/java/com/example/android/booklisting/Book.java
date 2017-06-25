@@ -34,6 +34,11 @@ public class Book {
         return mPublisher;
     }
 
+
+    public void setmPublisher(String mPublisher) {
+        this.mPublisher = mPublisher;
+    }
+
     public String getmTitle() {
         return mTitle;
     }

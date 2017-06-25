@@ -38,6 +38,7 @@ public final class QueryUtils {
     private QueryUtils() {
     }
 
+
     /**
      * Query the Google Book data  set and return a list of {@link Book} objects.
      */
@@ -184,25 +185,59 @@ public final class QueryUtils {
                 String title = volumeInfo.getString("title");
                 Log.v(LOG_TAG, "TEST: the Title of the book is: " + title);
 
-                // Extract the value for the key called "place"
-                String publisher = volumeInfo.getString("publisher");
 
-                // Extract the value for the key called "time"
-                String publishedDate = volumeInfo.getString("publishedDate");
+                String publisher;
+                //conditional whether a publisher exist or not
+                if (volumeInfo.has("publisher")) {
+                    // Extract the value for the key called "publisher"
+                    publisher = volumeInfo.getString("publisher");
+                } else {
+                    publisher = "N.A.";
+                }
 
-                // Extract the value for the key called "url"
-                String url = volumeInfo.getString("canonicalVolumeLink");
+
+                String publishedDate;
+                //conditional whether a publisher exist or not
+                if (volumeInfo.has("publishedDate")) {
+                    // Extract the value for the key called "publishDate"
+                    publishedDate = volumeInfo.getString("publishedDate");
+                } else {
+                    publishedDate = "N.A.";
+                }
+
+
+                String url;
+                if (volumeInfo.has("canonicalVolumeLink")) {
+                    // Extract the value for the key called "canonicalVolumeLink"
+                    url = volumeInfo.getString("canonicalVolumeLink");
+                } else {
+                    url = "N.A.";
+                }
 
 
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
 
+
+                String smallThumb;
+                if (imageLinks.has("smallThumbnail")) {
                 // Extract the value for the key called "imageLinks"
-                String smallThumb = imageLinks.getString("smallThumbnail");
+                    smallThumb = imageLinks.getString("smallThumbnail");
+                } else {
+                    smallThumb = "N.A.";
+                }
+
 
 
                 JSONArray authorsArray = volumeInfo.getJSONArray("authors");
 
-                String author = authorsArray.getString(0);
+                String author;
+
+                if (authorsArray(0).has("authors")) {
+
+                    author = authorsArray.getString(0);
+                } else {
+                    author = "N.A.";
+                }
 
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
