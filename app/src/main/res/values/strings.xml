@@ -19,4 +19,5 @@
     <string name="site_var">placeSite</string>
     <string name="empty_state">No Books Found</string>
     <string name="no_internet">No Internet Connectivity</string>
+    <string name="search_books">Search Books</string>
 </resources>

@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.content.Loader;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +48,13 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
     /**
      * URL to query the Google Book Api dataset for book information
      */
-    private static final String GOOGLE_BOOKS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=30";
+    private static final String GOOGLE_BOOKS_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?maxResults=30&q=";
+
+    //Variable for the SearchView
+    private SearchView searchView;
+
+    //Variable for the user input
+    private String mQuery;
 
     /**
      * TextView that is displayed when the list is empty
@@ -107,16 +114,46 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
+
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
+        //Set an OnQueryTextListener to the search button
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String newText) {
+
+                //Get the SearchView and enable the Submit Button on it
+                SearchView searchView = (SearchView) findViewById(R.id.search_view);
+                searchView.setSubmitButtonEnabled(true);
+
+                //Get the query given by the user
+                mQuery = searchView.getQuery().toString();
+                //Restart the Loader upon the search query(execute the search)
+                getLoaderManager().restartLoader(BOOKS_LOADER_ID, null, BookListingActivity.this);
+                return true;
+            }
+        });
+
+
+
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             LoaderManager loaderManager = getLoaderManager();
+
+            //Default search key when you open the app for the first time.
+            searchView.setQuery("Android", true);
+
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
@@ -140,7 +177,7 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
 
         // Create a new loader for the given URL
-        return new BookListingLoader(this, GOOGLE_BOOKS_REQUEST_URL);
+        return new BookListingLoader(this, GOOGLE_BOOKS_REQUEST_URL + mQuery);
     }
 
 
