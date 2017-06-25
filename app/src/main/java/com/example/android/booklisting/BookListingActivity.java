@@ -78,6 +78,9 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_listing_activity);
 
+        // Find a reference to the {@link SearchView} in the layout
+        searchView = (SearchView) findViewById(R.id.search_view);
+
         // Find a reference to the {@link ListView} in the layout
         ListView bookListView = (ListView) findViewById(R.id.list);
 
@@ -124,6 +127,7 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         //Set an OnQueryTextListener to the search button
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
+
             @Override
             public boolean onQueryTextChange(String query) {
                 return false;
@@ -132,8 +136,6 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
             @Override
             public boolean onQueryTextSubmit(String newText) {
 
-                //Get the SearchView and enable the Submit Button on it
-                SearchView searchView = (SearchView) findViewById(R.id.search_view);
                 searchView.setSubmitButtonEnabled(true);
 
                 //Get the query given by the user
