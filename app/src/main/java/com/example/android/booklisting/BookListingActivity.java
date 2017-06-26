@@ -61,10 +61,6 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
      */
     private TextView mEmptyStateTextView;
     /**
-     * ImageView that is displayed when the list is empty
-     */
-    private ImageView mEmptyStateImageView;
-    /**
      * Progress Bar that is displayed when the data is loading
      */
     private ProgressBar mProgressBarView;
@@ -75,6 +71,7 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
 
     //ListView that is displayed when the list is empty
     private ListView bookListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +85,10 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         // Find a reference to the {@link SearchView} in the layout
         searchView = (SearchView) findViewById(R.id.search_view);
 
+        // Query hint on the SearchView box
         searchView.setQueryHint(getString(R.string.search_bookss));
 
+        // Set the SearchView box active
         searchView.setIconifiedByDefault(false);
 
         // Find a reference to the {@link loading_spinner} in the layout
@@ -98,11 +97,9 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         // Find a reference to the {@link ListView} in the layout
         final ListView bookListView = (ListView) findViewById(R.id.list);
 
+        // Empty state textView for No Books availbale or no Internet Connectivity messages
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_text_view);
         bookListView.setEmptyView(mEmptyStateTextView);
-
-        mEmptyStateImageView = (ImageView) findViewById(R.id.empty_image_view);
-        bookListView.setEmptyView(mEmptyStateImageView);
 
         // Create a new adapter that takes an empty list of books as input
         mAdapter = new BookListingAdapter(this, new ArrayList<Book>());
@@ -150,6 +147,8 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
             public boolean onQueryTextSubmit(String newText) {
                 //Get the query given by the user
                 mQuery = searchView.getQuery().toString();
+
+                //Replacing empty space with plus sign to allow multiple word searches
                 mQuery = mQuery.replace(" ", "+");
                 //Restart the Loader upon the search query(execute the search)
                 getLoaderManager().restartLoader(BOOKS_LOADER_ID, null, BookListingActivity.this);
@@ -182,14 +181,16 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
+    // Loader initialised
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
 
+        //setting a progress bar whiloe the loader load data
         mProgressBarView.setVisibility(View.VISIBLE);
         bookListView.setVisibility(View.INVISIBLE);
         mEmptyStateTextView.setVisibility(View.GONE);
-        mEmptyStateImageView.setVisibility(View.GONE);
+
 
         String requestUrl = "";
         if (mQuery != null && mQuery != "") {
@@ -219,8 +220,7 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         if (bookListings != null && !bookListings.isEmpty()) {
             mAdapter.addAll(bookListings);
         } else {
-            // Set empty state image to display a Crocodile Chilling"
-            mEmptyStateImageView.setImageResource(R.drawable.relaxs);
+            // Set empty state TextView to display a no Books available sorry
             mEmptyStateTextView.setText(R.string.empty_state);
         }
     }
