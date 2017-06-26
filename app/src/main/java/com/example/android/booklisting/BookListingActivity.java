@@ -88,6 +88,10 @@ public class BookListingActivity extends AppCompatActivity implements LoaderMana
         // Find a reference to the {@link SearchView} in the layout
         searchView = (SearchView) findViewById(R.id.search_view);
 
+        searchView.setQueryHint(getString(R.string.search_bookss));
+
+        searchView.setIconifiedByDefault(false);
+
         // Find a reference to the {@link loading_spinner} in the layout
         mProgressBarView = (ProgressBar) findViewById(R.id.loading_spinner);
 

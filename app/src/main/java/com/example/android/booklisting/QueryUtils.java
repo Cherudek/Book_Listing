@@ -231,10 +231,7 @@ public final class QueryUtils {
                 JSONArray authorsArray = volumeInfo.getJSONArray("authors");
 
                 String author;
-
-
-                if (authorsArray(0).has("authors")) {
-
+                if (authorsArray != null) {
                     author = authorsArray.getString(0);
                 } else {
                     author = "N.A.";
