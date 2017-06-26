@@ -214,13 +214,12 @@ public final class QueryUtils {
                     url = "N.A.";
                 }
 
-
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-
-
                 String smallThumb;
-                if (imageLinks.has("smallThumbnail")) {
-                // Extract the value for the key called "imageLinks"
+                if (volumeInfo.has("imageLinks")) {
+
+                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+
+                    // Extract the value for the key called "imageLinks"
                     smallThumb = imageLinks.getString("smallThumbnail");
                 } else {
                     smallThumb = "N.A.";
