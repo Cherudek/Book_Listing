@@ -34,8 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:queryHint="@string/search_books"
-            android:textAlignment="center" />
+            android:queryHint="@string/search_books" />
     </android.support.v7.widget.CardView>
 
 

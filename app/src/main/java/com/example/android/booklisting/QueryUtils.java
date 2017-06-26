@@ -226,12 +226,10 @@ public final class QueryUtils {
                     smallThumb = "N.A.";
                 }
 
-
-
-                JSONArray authorsArray = volumeInfo.getJSONArray("authors");
-
                 String author;
-                if (authorsArray != null) {
+                if (volumeInfo.has("authors")) {
+                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+
                     author = authorsArray.getString(0);
                 } else {
                     author = "N.A.";
